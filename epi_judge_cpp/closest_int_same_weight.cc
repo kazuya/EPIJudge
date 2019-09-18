@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "test_framework/generic_test.h"
-unsigned long long ClosestIntSameBitCount(unsigned long long x) {
+unsigned long long ClosestIntSameBitCountLinear(unsigned long long x) {
   // Find the lowest pair of differing bits.
   // Note the description in the book 4.4 seems a bit wrong about the LSB, which is not relevant
   const int nBits = sizeof(x)*8;
@@ -9,6 +9,15 @@ unsigned long long ClosestIntSameBitCount(unsigned long long x) {
     if (((x >> i) ^ (x >> (i+1))) & 1) {
       return (x ^ (3 << i));
     }
+  }
+  throw std::invalid_argument("all bits are 0 or 1");
+}
+
+unsigned long long ClosestIntSameBitCount(unsigned long long x) {
+  auto xx = x ^ (x >> 1);
+  if (x != 0xFFFFFFFFFFFFFFFFULL && xx) {
+    auto xxx = xx & ~(xx - 1);
+    return (x ^ (xxx | (xxx << 1)));
   }
   throw std::invalid_argument("all bits are 0 or 1");
 }
