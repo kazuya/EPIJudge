@@ -1,7 +1,15 @@
 #include "test_framework/generic_test.h"
 double Power(double x, int y) {
-  // TODO - you fill in here.
-  return 0.0;
+  if (y < 0) {
+    return Power(1/x, -y);
+  }
+  int z = y >> 1;
+  double p = (y & 1) ? x : 1.0L;
+  if (z) {
+    double pp = Power(x, z);
+    p *= pp*pp;
+  }
+  return p;
 }
 
 int main(int argc, char* argv[]) {
