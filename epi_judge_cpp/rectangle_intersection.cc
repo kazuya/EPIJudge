@@ -6,9 +6,38 @@ struct Rect {
   int x, y, width, height;
 };
 
+struct Line {
+  int x, length;
+};
+
+Line IntersectLine(const Line& L1, const Line& L2) {
+  if (L1.x > L2.x) {
+    return IntersectLine(L2, L1);
+  }
+  int p1 = L1.x+L1.length;
+  int p2 = L2.x+L2.length;
+  if (p1 >= L2.x) {
+    if (p1 >= p2) {
+      return Line{L2.x, L2.length};
+    } else {
+      return Line{L2.x, p1-L2.x};
+    }
+  } else {
+    return Line{0,-1};
+  }
+}
+
 Rect IntersectRectangle(const Rect& R1, const Rect& R2) {
-  // TODO - you fill in here.
-  return {0, 0, 0, 0};
+  Line Lx = IntersectLine(Line{R1.x,R1.width}, Line{R2.x,R2.width});
+  if (Lx.length < 0) {
+    return {0, 0, -1, -1};
+  }
+  Line Ly = IntersectLine(Line{R1.y,R1.height}, Line{R2.y,R2.height});
+  if (Ly.length < 0) {
+    return {0, 0, -1, -1};
+  }
+
+  return {Lx.x, Ly.x, Lx.length, Ly.length};
 }
 bool operator==(const Rect& r1, const Rect& r2) {
   return std::tie(r1.x, r1.y, r1.width, r1.height) ==
