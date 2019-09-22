@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <utility>
 #include <set>
 #include <vector>
 #include "test_framework/generic_test.h"
@@ -6,7 +8,16 @@
 using std::vector;
 
 void EvenOdd(vector<int>* A_ptr) {
-  // TODO - you fill in here.
+  vector<int>& A = *A_ptr;
+  size_t next_even = 0, next_odd = A.size() - 1;
+  while (next_even < next_odd) {
+    if (A[next_even] % 2) {
+      std::swap(A[next_even], A[next_odd]);
+      --next_odd;
+    } else {
+      ++next_even;
+    }
+  }
   return;
 }
 void EvenOddWrapper(TimedExecutor& executor, vector<int> A) {
