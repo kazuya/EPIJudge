@@ -1,9 +1,26 @@
 #include <vector>
+#include <algorithm>
+
 #include "test_framework/generic_test.h"
 using std::vector;
 vector<int> PlusOne(vector<int> A) {
-  // TODO - you fill in here.
-  return {};
+  std::reverse(A.begin(), A.end());
+  int c = 1;
+  for (int i = 0; i < A.size(); i++) {
+    A[i] += c;
+    if (A[i] > 9) {
+      A[i] %= 10;
+      c = 1;
+    } else {
+      c = 0;
+      break;
+    }
+  }
+  if (c) {
+    A.push_back(c);
+  }
+  std::reverse(A.begin(), A.end());
+  return A;
 }
 
 int main(int argc, char* argv[]) {
