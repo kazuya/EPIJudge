@@ -6,8 +6,7 @@
 using std::vector;
 typedef enum { kRed, kWhite, kBlue } Color;
 
-
-void DutchFlagPartition(int pivot_index, vector<Color>* A_ptr) {
+void DutchFlagPartition_2pass(int pivot_index, vector<Color>* A_ptr) {
   vector<Color> &as = *A_ptr;
   Color p = as[pivot_index];
   for (int i = 0, j = 0; i < as.size(); i++) {
@@ -20,6 +19,36 @@ void DutchFlagPartition(int pivot_index, vector<Color>* A_ptr) {
     if (as[i] > p) {
       std::swap(as[i], as[j]);
       j--;
+    }
+  }
+  return;
+}
+
+void DutchFlagPartition(int pivot_index, vector<Color>* A_ptr) {
+  vector<Color> &as = *A_ptr;
+  Color p = as[pivot_index];
+  // i: unclassified, j: smaller, k: larger
+
+  // Example:
+  // pivot: 3
+  // /4 0 3 3 2 5 1/
+  // /1 0 3 3 2 5 / 4
+  // 1 / 0 3 3 2 5 / 4
+  // 1 0 / 3 3 2 5 / 4
+  // 1 0 / 3 3 2 5 / 4
+  // 1 0 2 / 3 3 5 / 4
+  // 1 0 2 / 3 3 5 / 4
+  // 1 0 2 / 3 3 / 5 4
+  for (int i = 0, j = 0, k = as.size() - 1; i <= k;) {
+    if (as[i] < p) {
+      std::swap(as[i], as[j]);
+      j++;
+      i++;
+    } else if (as[i] > p) {
+      std::swap(as[i], as[k]);
+      k--;
+    } else {
+      i++;
     }
   }
   return;
