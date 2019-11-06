@@ -2,8 +2,14 @@
 #include "test_framework/generic_test.h"
 using std::vector;
 bool CanReachEnd(const vector<int>& max_advance_steps) {
-  // TODO - you fill in here.
-  return true;
+  int furthest = 0;
+  for (int i = 0; i < max_advance_steps.size(); ++i) {
+    if (i > furthest) {
+      return false;
+    }
+    furthest = std::max(furthest, i+max_advance_steps[i]);
+  }
+  return furthest >= max_advance_steps.size()-1;
 }
 
 int main(int argc, char* argv[]) {
