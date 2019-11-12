@@ -1,9 +1,44 @@
 #include <vector>
+#include <limits>
 #include "test_framework/generic_test.h"
 using std::vector;
 double BuyAndSellStockTwice(const vector<double>& prices) {
-  // TODO - you fill in here.
-  return 0.0;
+  vector<double> fms(prices.size());
+  double m = std::numeric_limits<double>::max(), dm = 0.0;
+  for (int i = 0; i < prices.size(); ++i) {
+    auto a = prices[i];
+    if (a < m) {
+      m = a;
+    }
+    auto d = a - m;
+    if (d > dm) {
+      dm = d;
+    }
+    fms[i] = dm;
+  }
+  vector<double> bms(prices.size());
+  m = std::numeric_limits<double>::min(), dm = 0.0;
+  for (int i = prices.size() - 1; i >= 0; --i) {
+    auto a = prices[i];
+    if (a > m) {
+      m = a;
+    }
+    auto d = m - a;
+    if (d > dm) {
+      dm = d;
+    }
+    bms[i] = dm;
+  }
+  fms.insert(fms.begin(), 0);
+  dm = 0.0;
+  for (int i = 0; i < prices.size(); ++i) {
+    auto d = fms[i] + bms[i];
+    if (d > dm) {
+      dm = d;
+    }
+  }
+
+  return dm;
 }
 
 int main(int argc, char* argv[]) {
